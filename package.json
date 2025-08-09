@@ -1,0 +1,1 @@
+{"name":"smartedit","version":"1.0.1","description":"A simple Node.js CLI text editor. but build in power","main":"smartedit.js","bin":{"smartedit":"./smartedit.js"},"scripts":{"test":"echo \"Error: no test specified\" && exit 1"},"keywords":[],"author":"Smart Tell line","license":"ISC","dependencies":{"g":"^2.0.1"}}
