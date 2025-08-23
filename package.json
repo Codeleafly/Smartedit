@@ -1,0 +1,28 @@
+{
+  "name": "smartedit",
+  "version": "1.0.5",
+  "description": "SmartEdit: A Powerful and Extensible CLI Editor",
+  "keywords": [
+    "CLI",
+    "text",
+    "editor"
+  ],
+  "homepage": "https://github.com/Codeleafly/Smartedit#readme",
+  "bugs": {
+    "url": "https://github.com/Codeleafly/Smartedit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Codeleafly/Smartedit.git"
+  },
+  "license": "ISC",
+  "author": "Smart Tell Line",
+  "type": "module",
+  "main": "smartedit.mjs",
+  "bin": {
+    "smartedit": "./smartedit.mjs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
