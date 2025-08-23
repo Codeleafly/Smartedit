@@ -13,25 +13,14 @@ With SmartEdit, you get a clean, uncluttered interface that automatically adapts
 * **Exceptional Performance**: Built with a focus on speed, SmartEdit is lightweight and responsive, handling large files with ease and minimal latency.
 * **Intuitive UX**: We've designed SmartEdit with a familiar set of keyboard shortcuts and behaviors, so you can start using it effectively from the moment you install it.
 * **Fully Responsive**: Whether you're on a large monitor or a small terminal window, SmartEdit's UI adapts beautifully, ensuring your code is always presented clearly without horizontal scrolling.
-* **A Developer's Tool**: SmartEdit's features, from advanced syntax highlighting to a complete undo/redo system, are tailored specifically to the needs of software developers.
+* **A Developer's Tool**: SmartEdit's features are tailored specifically to the needs of software developers.
 * **Community-Driven**: SmartEdit is open source, and we actively encourage contributions to make it the best CLI editor in the world.
 
 ---
 
 ## 🚀 Key Features in Detail
 
-### Intelligent Syntax Highlighting
 
-![SmartEdit with JavaScript Syntax Highlighting](https://placehold.co/800x400/222B45/E2E8F0?text=SmartEdit+with+JavaScript+Syntax+Highlighting)
-
-SmartEdit uses a sophisticated parsing engine to apply syntax highlighting on the fly. It supports a wide array of file types and is easily extensible. Keywords, comments, strings, and operators are rendered in distinct colors, drastically improving code readability and helping you identify errors more quickly. The current version includes support for:
-
-* JavaScript (`.js`)
-* HTML (`.html`)
-* CSS (`.css`)
-* JSON (`.json`)
-* C++ (`.cpp`)
-* Python (`.py`)
 
 ### Robust Editing & Navigation
 
@@ -40,12 +29,15 @@ SmartEdit offers a complete suite of editing tools, making it a true replacement
 * **Undo/Redo**: Our stack-based system captures every keystroke and action, allowing you to `Ctrl + Z` to revert changes and `Ctrl + Y` to reapply them. This provides an invaluable safety net for all your coding sessions.
 * **Copy/Paste/Cut**: The editor provides standard `Ctrl + C`, `Ctrl + V`, and `Ctrl + X` shortcuts, which work with both single characters and multi-line text blocks.
 * **Effortless Navigation**: In addition to standard arrow keys, you can jump to the beginning of a line with `Ctrl + A` and the end with `Ctrl + E`. `Page Up` and `Page Down` provide fast vertical scrolling for navigating large files.
+* **Toggle Blinking Cursor**: Use `Ctrl + R` to enable or disable the blinking cursor for the current session.
 
 ### Adaptive and Clean Interface
 
 ![Responsive UI on a Smaller Terminal](https://placehold.co/800x400/334155/ffffff?text=Responsive+UI+on+a+Smaller+Terminal)
 
 SmartEdit's UI is built on a responsive grid system. The moment you resize your terminal, the editor's display adapts in real-time. Line numbers, content, and the status bar are all dynamically adjusted to the new dimensions. This ensures that you get a clear, unobstructed view of your code, regardless of your terminal size.
+* **Custom Blinking Cursor**: A visually distinct blinking pipe '|' indicates the current typing position, which can be toggled on/off with `Ctrl + R`.
+* **Simplified Path Display**: The editor's title and status bar now display only the filename for a cleaner UI, while internally retaining the full path for saving.
 
 ---
 
@@ -71,7 +63,7 @@ npx smartedit
 
 ### Basic Usage
 
-To open an existing file or create a new one, type `smartedit` followed by the filename.
+To open an existing file or create a new one, type `smartedit` followed by the filename. The editor's UI will display only the filename for a cleaner experience, while internally managing the full path for saving.
 
 ```bash
 # Open 'main.py' or create it if it doesn't exist
@@ -91,32 +83,25 @@ This section is for developers interested in the architecture and internal worki
 
 The heart of SmartEdit is its rendering loop. It's a simple yet powerful design: on every key press, the editor's state is updated, the screen is cleared, and the UI is redrawn. This ensures that the display is always a perfect reflection of the current state.
 
-#### `displayContent()`
+#### `drawEditor()`
 
 **Purpose**: The central rendering function.
 
 **Code Breakdown**:
 1.  `clearScreen()` is called to reset the terminal.
-2.  The file content (`lines` array) is iterated over.
-3.  Each line is passed to `highlightContent()` for syntax highlighting.
-4.  Line numbers are generated and displayed.
-5.  `getVisualLineSegments()` is used to break up long lines for wrapping.
-6.  The highlighted and wrapped content is printed to the terminal.
-7.  Finally, the status bar is rendered, and the cursor is repositioned using `readline.cursorTo()` and `readline.moveCursor()` to the correct `(x, y)` coordinates.
+2.  The file content (`fileContent` array) is iterated over.
+3.  Line numbers are generated and displayed.
+4.  The content is printed to the terminal, with a custom blinking cursor at the current typing position.
+5.  The status bar is rendered.
 
-#### `highlightContent(content, filename)`
 
-**Purpose**: To apply syntax highlighting based on file type.
 
-**Code Breakdown**: This function uses a series of regular expressions (e.g., for `/\b(const|let|var|function)\b/g` in JavaScript) to find language-specific tokens. It wraps these tokens with ANSI escape codes (`\x1b[33m` for yellow, `\x1b[36m` for cyan, etc.) from the `Colors` constant. The final output is a single string with embedded color codes.
-
-#### `getVisualWidth(text)` and `getVisualLineSegments(...)`
+#### `getVisualWidth(text)`
 
 **Purpose**: To handle the editor's responsive layout.
 
 **Code Breakdown**:
 * `getVisualWidth()` uses a regular expression to count the characters without including ANSI codes, providing the true on-screen width of a string.
-* `getVisualLineSegments()` uses this width to intelligently wrap lines. It iterates through a line, adding words to a segment until the `availableWidth` is exceeded. It then starts a new segment, preventing text from spilling off-screen.
 
 ---
 
