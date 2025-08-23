@@ -1,11 +1,18 @@
 {
   "name": "smartedit",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "SmartEdit: A Powerful and Extensible CLI Editor",
   "keywords": [
-    "CLI",
-    "text",
-    "editor"
+    "CLI", "text", "editor", "terminal", "command-line", "code", "programming", "developer", "tool", "utility",
+    "javascript", "nodejs", "mjs", "cross-platform", "responsive", "UI", "UX", "blinking", "cursor", "shortcut",
+    "file-management", "save", "load", "create", "edit", "plain-text", "minimal", "fast", "efficient", "lightweight",
+    "productivity", "workflow", "engineering", "software", "development", "scripting", "automation", "console", "bash", "zsh",
+    "fish", "shell", "linux", "windows", "macos", "unix", "open-source", "MIT-license", "github", "repository",
+    "version-control", "git", "npm", "package", "module", "esm", "async", "await", "promises", "readline",
+    "process", "stdout", "stdin", "tty", "ansi", "escape-codes", "colors", "gradients", "styling", "theming",
+    "customizable", "extensible", "modern", "smart", "intelligent", "buffer", "document", "line-numbers", "status-bar", "navigation",
+    "keyboard-shortcuts", "hotkeys", "cli-app", "cli-tool", "cli-editor", "text-processing", "data-entry", "configuration", "config-files", "log-files",
+    "markdown", "json-editor", "yaml-editor", "script-editor", "web-development", "backend-development", "frontend-development", "devops", "sysadmin", "automation-script"
   ],
   "homepage": "https://github.com/Codeleafly/Smartedit#readme",
   "bugs": {
