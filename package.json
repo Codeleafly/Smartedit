@@ -22,7 +22,7 @@
     "type": "git",
     "url": "git+https://github.com/Codeleafly/Smartedit.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "author": "Smart Tell Line",
   "type": "module",
   "main": "smartedit.mjs",
