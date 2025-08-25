@@ -5,7 +5,8 @@ import { promises as fs } from 'fs'; // Import fs for reading package.json
 import { loadFile } from './fileOperations.mjs';
 import { drawEditor, handleKeypress, updateTerminalSize, currentFilePath, originalUserProvidedPath, startBlinking } from './editor.mjs';
 import { displayStatusMessage, color, gradient } from './styling.mjs';
-import { handleUpdate } from './updateHandler.mjs'; // Import the new update handler
+import { box, line, title, Spinner, progressBar, log } from './adclours.mjs';
+
 
 const UNTITLED_FILENAME = 'untitled.txt';
 
@@ -16,7 +17,6 @@ ${color.yellow('Usage:')}
   ${color.green('smartedit')} [${color.blue('filename')}]
   ${color.green('smartedit')} ${color.blue('path/to/filename')}
   ${color.green('smartedit')} ${color.magenta('--help')} | ${color.magenta('-h')}
-  ${color.green('smartedit')} ${color.magenta('--update')} | ${color.magenta('-u')}
   ${color.green('smartedit')} ${color.magenta('--version')} | ${color.magenta('-v')}
 
 ${color.yellow('Commands:')}
@@ -44,15 +44,44 @@ function displayUsage() {
     console.log(HELP_MESSAGE);
 }
 
+// Helper to clear screen and move cursor to home
+function clearScreen() {
+    process.stdout.write('\x1Bc');
+}
+
+// Helper to move cursor
+function moveCursor(row, col) {
+    process.stdout.write(`\x1B[${row};${col}H`);
+}
+
+async function displayUnknownFlagError(flag) {
+    clearScreen();
+    const errorMessage = box(
+        `${color.bold.red('Unknown Flag:')} ${color.yellow(flag)}
+
+` +
+        `${color.white('Please use')} ${color.cyan('smartedit --help')} ${color.white('to see supported flags.')}`,
+        { borderColor: 'red', style: 'double', padding: 2 }
+    );
+    console.log(errorMessage);
+
+    await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds
+    clearScreen();
+}
+
 // Main execution
 (async () => {
     const args = process.argv.slice(2);
-    
-    // Check for update flags first
-    if (args.includes('--update') || args.includes('-update') || args.includes('-u') || args.includes('--u')) {
-        await handleUpdate();
-        process.exit(0); // Exit after handling update
+
+    const supportedFlags = ['--version', '-v', '--help', '-h'];
+    const unknownFlag = args.find(arg => arg.startsWith('-') && !supportedFlags.includes(arg));
+
+    if (unknownFlag) {
+        await displayUnknownFlagError(unknownFlag);
+        process.exit(1);
     }
+    
+    
 
     // Check for version flags
     if (args.includes('--version') || args.includes('-version') || args.includes('-v') || args.includes('--v')) {
