@@ -1,9 +1,11 @@
 #! /usr/bin/env node
 import process from 'process';
 import path from 'path';
+import { promises as fs } from 'fs'; // Import fs for reading package.json
 import { loadFile } from './fileOperations.mjs';
 import { drawEditor, handleKeypress, updateTerminalSize, currentFilePath, originalUserProvidedPath, startBlinking } from './editor.mjs';
-import { displayStatusMessage, color } from './styling.mjs';
+import { displayStatusMessage, color, gradient } from './styling.mjs';
+import { handleUpdate } from './updateHandler.mjs'; // Import the new update handler
 
 const UNTITLED_FILENAME = 'untitled.txt';
 
@@ -14,6 +16,8 @@ ${color.yellow('Usage:')}
   ${color.green('smartedit')} [${color.blue('filename')}]
   ${color.green('smartedit')} ${color.blue('path/to/filename')}
   ${color.green('smartedit')} ${color.magenta('--help')} | ${color.magenta('-h')}
+  ${color.green('smartedit')} ${color.magenta('--update')} | ${color.magenta('-u')}
+  ${color.green('smartedit')} ${color.magenta('--version')} | ${color.magenta('-v')}
 
 ${color.yellow('Commands:')}
   ${color.bold('Arrow Keys')}: Move cursor
@@ -44,6 +48,24 @@ function displayUsage() {
 (async () => {
     const args = process.argv.slice(2);
     
+    // Check for update flags first
+    if (args.includes('--update') || args.includes('-update') || args.includes('-u') || args.includes('--u')) {
+        await handleUpdate();
+        process.exit(0); // Exit after handling update
+    }
+
+    // Check for version flags
+    if (args.includes('--version') || args.includes('-version') || args.includes('-v') || args.includes('--v')) {
+        try {
+            const packageJsonPath = path.resolve('./package.json');
+            const content = await fs.readFile(packageJsonPath, 'utf8');
+            const packageJson = JSON.parse(content);
+            console.log(gradient(`SmartEdit Version: ${packageJson.version}`, '#8A2BE2', '#ADD8E6')); // Purple to Light Blue
+        } catch (error) {
+            console.error(color.red(`Error reading version: ${error.message}`));
+        }
+        process.exit(0);
+    }
 
     let initialFilePath = UNTITLED_FILENAME;
     let userProvidedArg = ''; // To store the original argument
